@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>ExerciseTracker</title>
+	
+	<script type="text/javascript" src="cordova-2.6.0.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+	
+	<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="jquery.mobile-1.3.1.min.js"></script>
+	<script type="text/javascript" src="exercisetracker.js"></script>
+    <script type="text/javascript" src="statusbarnotification.js"></script>
+    <script type="text/javascript" charset="utf-8" src="tts.js"></script>
+	
+	<link rel="stylesheet" href="jquery.mobile-1.3.1.min.css" />
+	
+	<!--<link rel="stylesheet" href="themes/fitstadiumTheme.css" />-->
+</head>
+<body>
+
+<!-- Start of Trackwork Out page -->
+<div data-role="page" id="startTracking">
+
+	<div data-role="header">
+		<h1>Gps Tracker</h1>
+		
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#startTracking" data-icon="plus">Registra</a></li>
+				<li><a href="#history" data-icon="grid">Attivit&agrave;</a></li>
+				<li><a href="#settings" data-icon="gear">Impostazioni</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="content">	
+		<label for="activity" class="select">Attivit&agrave; sportiva:</label>
+		<select name="activity" id="activity">
+		   <option value="Ciclismo sportivo">Ciclismo sportivo</option>
+		   <option value="Ciclismo di montagna">Ciclismo di montagna</option>
+		   <option value="Ciclismo di strada">Ciclismo di strada</option>
+		   <option value="Corsa">Corsa</option>
+		   <option value="Camminata">Camminata</option>
+		</select>
+		<input type="hidden" name="track_id" id="track_id" placeholder="Workout ID/Name"/>
+		<p id="startTracking_info"></p>		
+		<div id="startTracking_start_div">
+			<button data-role="button" id="startTracking_start"><img src="images/play64.png"/></button>
+			
+		</div>
+		<div id="startTracking_stop_div">
+			<button data-role="button" id="startTracking_stop"><img src="images/stop64.png"/></button>  
+		</div>
+		
+		<div class="ui-grid-solo">
+			<div class="ui-block-a"><div id="timer_div" style="height:30px;width:100%;text-align:center;margin-bottom:15px;margin-top:15px;"><img src="images/timer.png"/> <span id="timer" style="line-height:30px;vertical-align:top;left:5px;position:relative;font-weight:bold;font-size:24px;">00 : 00 : 00</span></div></div>
+		</div>
+		
+		<div class="ui-grid-a">
+			<div class="ui-block-a"><div id="speed_div" style="text-align:center;"><img src="images/runner.png"/> <span id="speed" style="display:block">0.00 km/h</span></div></div>
+			<div class="ui-block-b"><div id="total_km_div" style="text-align:center;"><img src="images/map.png"/> <span id="total_km" style="display:block">0.00 km</span></div></div>
+			<!--<div class="ui-block-c"><div id="coordinate_div" style="text-align:center;"><img src="images/coordinate.png"/> <span id="coordinate" style="display:block">0,0</span></div></div>-->
+		</div><!-- /grid-b -->
+		
+		<p id="startTracking_status">
+		</p>
+		
+		
+		
+		
+	</div>
+
+
+</div><!-- /page -->
+
+<!-- Start of the History page -->
+<div data-role="page" id="history">
+
+    <div data-role="header">
+        <h1>Gps Tracker</h1>
+        
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#startTracking" data-transition="none" data-icon="plus">Registra</a></li>
+				<li><a href="#history" data-transition="none" data-icon="grid">Attivit&agrave;</a></li>
+				<li><a href="#settings" data-transition="none" data-icon="gear">Impostazioni</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div data-role="content">	
+        <p id="tracks_recorded"></p>
+        
+        <ul data-role="listview" id="history_tracklist">
+
+        </ul>
+    </div>
+
+
+</div><!-- /page -->
+
+<!-- Track Info page -->
+<div data-role="page" id="track_info">
+
+	<div data-role="header">
+		<h1>Gps Tracker</h1>
+		
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#startTracking" data-transition="none" data-icon="plus">Registra</a></li>
+				<li><a href="#history" data-transition="none" data-icon="grid">Attivit&agrave;</a></li>
+				<li><a href="#settings" data-transition="none" data-icon="gear">Impostazioni</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="content">	
+		<p id="track_info_info"></p>
+		<div id="track_info_timer_div" style="height:30px;"><img src="images/timer.png"/> <span id="track_info_timer" style="line-height:30px;vertical-align:top;left:50px;position:absolute;">00 : 00 : 00</span></div>
+		<div id="track_info_speed_div" style="height:30px;"><img src="images/runner.png"/> <span id="track_info_average_speed" style="line-height:30px;vertical-align:top;left:50px;position:absolute;">0 km/h</span></div>
+		<div id="track_info_total_km_div" style="height:30px;"><img src="images/map.png"/> <span id="track_info_total_km" style="line-height:30px;padding-bottom:10px;left:50px;position:absolute;">0 km</span></div>
+		<!--position:absolute;bottom:0;left:0-->
+		<div id="map_canvas" style="position : absolute;top      : 220px; right    : 0;bottom   : 10px; left     : 0;"></div>
+		
+	</div>
+
+
+</div><!-- /page -->
+
+<!-- Start of Home page -->
+<div data-role="page" id="settings">
+
+	<div data-role="header">
+	
+		<h1>Gps Tracker</h1>
+	
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#startTracking" data-transition="none" data-icon="plus">Registra</a></li>
+				<li><a href="#history" data-transition="none" data-icon="grid">Attivit&agrave;</a></li>
+				<li><a href="#settings" data-transition="none" data-icon="gear">Impostazioni</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="content">
+		
+		<button id="home_network_button" data-icon="check">Connessione internet attiva</button>
+		<button id="home_clearstorage_button">Cancella storico percorsi</button>
+		<div id="home_seedgps_button_div"><button id="home_seedgps_button">Carica dati GPS di prova</button></div>
+		<label for="tts_option">Assistente vocale Google:</label>
+		<select name="tts_option" id="tts_option" data-role="slider">
+			<option value="off">Off</option>
+			<option value="on" selected="selected">On</option>
+		</select> 
+		<label for="debug_option">Modalit&agrave; debug:</label>
+		<select name="debug_option" id="debug_option" data-role="slider">
+			<option value="off" selected="selected">Off</option>
+			<option value="on">On</option>
+		</select> 
+	</div>
+
+
+</div>
+<!-- End of Home page -->
+
+</body>
+</html>
